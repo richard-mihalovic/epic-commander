@@ -1,6 +1,7 @@
 # epic-commander
 Multiplatform double window manager.
 
+![Epic commander](https://github.com/richard-mihalovic/epic-commander/blob/master/screenshot.png)
 
 
 ## Build & run application
