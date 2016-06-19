@@ -80,8 +80,13 @@ function panelLoadContent(state, side, path, activeRecord) {
 }
 
 function switchPanel(state) {
-    let activePanel = state.get('activePanel') === 'left' ? 'right' : 'left';
-    return state.set('activePanel', activePanel);
+    // dont switch panel side if panel is zoomed
+    if(isPanelZoomed(state)) return state;
+
+    return state.set(
+        'activePanel', 
+        state.get('activePanel') === 'left' ? 'right' : 'left'
+    );
 }
 
 function toggleShowHiddenFiles(state) {
@@ -190,4 +195,8 @@ function enterPanelRecord(state) {
         .setIn(['panels', side, 'presetActiveRecord'], presetActiveRecord);
 
     return panelLoadContent(updatedState, side, fullPath, presetActiveRecord);
+}
+
+function isPanelZoomed(state) {
+    return state.get('zoomedPanel') !== '';
 }
