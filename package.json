@@ -4,7 +4,7 @@
   "description": "EPIC commander",
   "main": "main.js",
   "scripts": {
-    "start": "./node_modules/electron-prebuilt/dist/Electron.app/Contents/MacOS/Electron .",
+    "start": "node_modules/electron-prebuilt/cli.js .",
     "watch": "./node_modules/.bin/webpack-dev-server",
     "electron-rebuild": "./node_modules/.bin/electron-rebuild"
   },
