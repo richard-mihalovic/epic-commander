@@ -58,4 +58,12 @@ export default class FileUtils {
 
         return _.concat(_sorted_direcotries, _sorted_files);
     }
+
+    static isDirectory(path) {
+        return statSync(path).isDirectory();
+    }
+
+    static isFile(path) {
+        return statSync(path).isFile();
+    }
 }

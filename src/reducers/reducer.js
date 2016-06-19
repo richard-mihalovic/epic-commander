@@ -177,9 +177,11 @@ function setActiveRecord(state, activePanel, title) {
 }
 
 function enterPanelRecord(state) {
-    // check if activeRecord is directory
     const side = state.get('activePanel');
     let fullPath = state.getIn(['panels', side, 'activePath']) + separtor + state.getIn(['panels', side, 'activeRecord']);
+
+    // check if activeRecord is directory
+    if(!FileUtils.isDirectory(fullPath)) return state;
 
     let presetActiveRecord = undefined;
     if(fullPath.endsWith('..')) {
