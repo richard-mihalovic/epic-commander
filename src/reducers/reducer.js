@@ -65,7 +65,7 @@ export default function (state = initialState, action) {
 }
 
 function panelLoadContent(state, side, path, activeRecord) {
-    let showHiddenFiles = state.getIn(['panels', 'side', 'settings', 'showHiddenFiles']);
+    let showHiddenFiles = state.getIn(['panels', side, 'settings', 'showHiddenFiles']);
     let records = Immutable.fromJS(
         FileUtils.scanPath(path, activeRecord, showHiddenFiles)
     );
@@ -76,29 +76,30 @@ function panelLoadContent(state, side, path, activeRecord) {
     ).setIn(
         ['panels', side, 'activeRecord'],
         activeRecord ? activeRecord : records.first().get('title')
-    );
+        );
 }
 
 function switchPanel(state) {
     // dont switch panel side if panel is zoomed
-    if(isPanelZoomed(state)) return state;
+    if (isPanelZoomed(state)) return state;
 
     return state.set(
-        'activePanel', 
+        'activePanel',
         state.get('activePanel') === 'left' ? 'right' : 'left'
     );
 }
 
 function toggleShowHiddenFiles(state) {
-    const activePanel = state.get('activePanel');
-    const activePath = state.getIn(['panels', activePanel, 'activePath']);
+    const side = state.get('activePanel');
+    const activePath = state.getIn(['panels', side, 'activePath']);
+    const showHiddenFiles = state.getIn(['panels', side, 'settings', 'showHiddenFiles']);
 
     const newState = state.setIn(
-        ['panels', 'side', 'settings', 'showHiddenFiles'],
-        !state.getIn(['panels', 'side', 'settings', 'showHiddenFiles'])
+        ['panels', side, 'settings', 'showHiddenFiles'],
+        !showHiddenFiles
     );
 
-    return panelLoadContent(newState, activePanel, activePath, undefined);
+    return panelLoadContent(newState, side, activePath, undefined);
 }
 
 function togglePanelZoom(state) {
@@ -159,8 +160,8 @@ function moveToLastRecordInPanel(state) {
     return setActiveRecord(state, activePanel, lastRecord);
 }
 
-function setActiveRecord(state, activePanel, title) {
-    let records = state.getIn(['panels', activePanel, 'records']);
+function setActiveRecord(state, side, title) {
+    let records = state.getIn(['panels', side, 'records']);
 
     // TODO: optimize this
     let recordsProcessed = Immutable.List([]);
@@ -171,9 +172,9 @@ function setActiveRecord(state, activePanel, title) {
     }
 
     return state
-        .set('activePanel', activePanel)
-        .setIn(['panels', activePanel, 'activeRecord'], title)
-        .setIn(['panels', activePanel, 'records'], recordsProcessed);
+        .set('activePanel', side)
+        .setIn(['panels', side, 'activeRecord'], title)
+        .setIn(['panels', side, 'records'], recordsProcessed);
 }
 
 function enterPanelRecord(state) {
@@ -181,10 +182,10 @@ function enterPanelRecord(state) {
     let fullPath = state.getIn(['panels', side, 'activePath']) + separtor + state.getIn(['panels', side, 'activeRecord']);
 
     // check if activeRecord is directory
-    if(!FileUtils.isDirectory(fullPath)) return state;
+    if (!FileUtils.isDirectory(fullPath)) return state;
 
     let presetActiveRecord = undefined;
-    if(fullPath.endsWith('..')) {
+    if (fullPath.endsWith('..')) {
         let record = fullPath.replace(separtor + '..', '');
         let idx = record.lastIndexOf(separtor);
         presetActiveRecord = record.substring(idx + 1, record.length);

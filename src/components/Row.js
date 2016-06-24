@@ -23,9 +23,11 @@ class Row extends React.Component {
                 onClick={ () => { this.handleOnClick(record); } }
             >
                 <div className="column_title">
-                    {record.get('title')}
+                    { record.get('title') }
                 </div>
-                <div className="column_size">{record.get('size')}</div>
+                <div className="column_size">
+                    { record.get('size') }
+                </div>
             </Container>
         );
     }

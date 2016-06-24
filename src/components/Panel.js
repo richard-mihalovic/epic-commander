@@ -10,8 +10,9 @@ import { panelLoadContent } from '../actions/panels';
 class Panel extends React.Component {
     componentDidMount() {
         const side = this.props.side;
+        const path = this.props.panels.getIn([side, 'activePath']);
         this.props.dispatch(
-            panelLoadContent(side, this.props.panels.getIn([side, 'activePath']))
+            panelLoadContent(side, path)
         );
     }
 
@@ -37,13 +38,13 @@ class Panel extends React.Component {
     }
 
     render() {
-        let panel = this.props.side;
-        let records = this.props.panels.get(panel).get('records');
-        let isPanelActive = this.props.activePanel === panel ? true : false;
+        let side = this.props.side;
+        let records = this.props.panels.get(side).get('records');
+        let isPanelActive = this.props.activePanel === side ? true : false;
 
-        let panelClassName = 'panel panel_' + panel;
+        let panelClassName = 'panel panel_' + side;
 
-        if (this.props.zoomedPanel === '' || this.props.zoomedPanel === panel) {
+        if (this.props.zoomedPanel === '' || this.props.zoomedPanel === side) {
             return (
                 <Container className={ panelClassName }>
                     {
@@ -58,7 +59,7 @@ class Panel extends React.Component {
                             }
 
                             return (
-                                <Row key={this.props.side + record.get('key') } className={className} side={panel} record={record} />
+                                <Row key={this.props.side + record.get('key') } className={className} side={side} record={record} />
                             );
                         })
                     }
@@ -76,8 +77,8 @@ class Panel extends React.Component {
         let zoomedPanel = nextProps.zoomedPanel;
         if (oldZoomedPanel !== zoomedPanel) return true;
 
-        let oldSettingShowHiddenFiles = this.props.panels.getIn(['side', 'settings', 'showHiddenFiles']);
-        let settingShowHiddenFiles = nextProps.panels.getIn(['side', 'settings', 'showHiddenFiles']);
+        let oldSettingShowHiddenFiles = this.props.panels.getIn([side, 'settings', 'showHiddenFiles']);
+        let settingShowHiddenFiles = nextProps.panels.getIn([side, 'settings', 'showHiddenFiles']);
         if (oldSettingShowHiddenFiles !== settingShowHiddenFiles) return true;
 
         let oldActivePanel = this.props.activePanel;
