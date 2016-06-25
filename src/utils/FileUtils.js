@@ -1,4 +1,4 @@
-import { readdirSync, statSync } from 'fs';
+import { readdirSync, readFileSync, statSync } from 'fs';
 import path from 'path';
 import filesize from 'filesize';
 import _ from 'lodash';
@@ -66,6 +66,10 @@ export default class FileUtils {
 
     static isFile(path) {
         return statSync(path).isFile();
+    }
+
+    static readFile(filename, encoding='utf-8') {
+        return readFileSync(filename, encoding);
     }
 
     /** Returns platform independent path separator. (unix: '/', win: '\') */
