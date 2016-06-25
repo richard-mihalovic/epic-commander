@@ -1,13 +1,14 @@
 import { readdirSync, statSync } from 'fs';
-import { resolve } from 'path';
+import path from 'path';
 import filesize from 'filesize';
 import _ from 'lodash';
 
 export default class FileUtils {
     static scanPath(path, presetActiveRecord, showHiddenFiles) {
         let records = [];
+        const pathSeparator = this.separator();
 
-        if (path != '/') {
+        if (path != pathSeparator) {
             let upDir = '..';
             records.push({
                 key: 0,
@@ -22,11 +23,11 @@ export default class FileUtils {
 
         let i = 1;
         for (let file of files) {
-            const full_path = path + '/' + file;
+            const full_path = path + pathSeparator + file;
             const isHiddenFile = file.startsWith('.');
             let addFileToList = true;
 
-            let isSelected = path === '/' && i === 1;
+            let isSelected = path === pathSeparator && i === 1;
             if(presetActiveRecord) {
                 isSelected = file === presetActiveRecord;
             }
@@ -65,5 +66,10 @@ export default class FileUtils {
 
     static isFile(path) {
         return statSync(path).isFile();
+    }
+
+    /** Returns platform independent path separator. (unix: '/', win: '\') */
+    static separator() {
+        return path.sep;
     }
 }
