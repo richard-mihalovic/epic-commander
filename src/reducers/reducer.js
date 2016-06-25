@@ -1,5 +1,5 @@
 import { PANEL_LOAD_CONTENT, PANEL_SET_ACTIVE_RECORD, PANEL_TOGGLE_SHOW_HIDDEN_FILES } from '../actions/panels';
-import { KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, KEY_TAB, KEY_ENTER, KEY_H, KEY_Z } from '../actions/keyboard';
+import { KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, KEY_TAB, KEY_ENTER, KEY_H, KEY_P, KEY_Z } from '../actions/keyboard';
 
 import FileUtils from '../utils/FileUtils';
 
@@ -10,6 +10,7 @@ import { resolve, sep as separtor } from 'path';
 let initialState = Immutable.fromJS({
     activePanel: 'left',
     zoomedPanel: '',
+    previewPanel: '',
 
     panels: {
         left: {
@@ -57,6 +58,9 @@ export default function (state = initialState, action) {
 
         case KEY_H:
             return toggleShowHiddenFiles(state);
+
+        case KEY_P:
+            return togglePreview(state);
 
         case KEY_Z:
             return togglePanelZoom(state);
@@ -198,6 +202,20 @@ function enterPanelRecord(state) {
         .setIn(['panels', side, 'presetActiveRecord'], presetActiveRecord);
 
     return panelLoadContent(updatedState, side, fullPath, presetActiveRecord);
+}
+
+function togglePreview(state) {
+    const side = state.get('activePanel');
+    const previewPanel = state.get('previewPanel');
+
+    if(previewPanel === '') {
+        return state.set(
+            'previewPanel', 
+            side === 'left' ? 'right' : 'left'
+        );
+    } else {
+        return state.set('previewPanel', '');        
+    }
 }
 
 function isPanelZoomed(state) {

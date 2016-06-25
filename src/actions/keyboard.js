@@ -8,6 +8,7 @@ export const KEY_TAB = 'KEY_TAB';
 export const KEY_ENTER = 'KEY_ENTER';
 export const KEY_ESCAPE = 'KEY_ESCAPE';
 export const KEY_H = 'KEY_H';
+export const KEY_P = 'KEY_P';
 export const KEY_Z = 'KEY_Z';
 
 export function keyPress(e) {
@@ -22,6 +23,7 @@ export function keyPress(e) {
     else if (key === 'Enter') action.type = KEY_ENTER;
     else if (key === 'Escape') action.type = KEY_ESCAPE;
     else if (key === 'KeyH') action.type = KEY_H;
+    else if (key === 'KeyP') action.type = KEY_P;
     else if (key === 'KeyZ') action.type = KEY_Z;
 
     if(action.type !== 'unknown') {
