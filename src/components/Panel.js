@@ -1,5 +1,5 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import { h, Component } from 'preact';
+import { connect } from 'preact-redux';
 import { findIndex } from 'lodash';
 
 import Container from './Container';
@@ -7,7 +7,7 @@ import Row from './Row';
 
 import { panelLoadContent } from '../actions/panels';
 
-class Panel extends React.Component {
+class Panel extends Component {
     componentDidMount() {
         const side = this.props.side;
         const path = this.props.panels.getIn([side, 'activePath']);
@@ -47,27 +47,33 @@ class Panel extends React.Component {
         if (this.props.zoomedPanel === '' || this.props.zoomedPanel === side) {
             return (
                 <Container className={ panelClassName }>
-                    {
-                        records.map((record) => {
-                            let isActive = record.get('isSelected');
-                            let className = 'row';
-
-                            if (isPanelActive && isActive) {
-                                className += ' row-is-active';
-                            } else if (!isPanelActive && isActive) {
-                                className += ' row-is-inactive';
-                            }
-
-                            return (
-                                <Row key={this.props.side + record.get('key') } className={className} side={side} record={record} />
-                            );
-                        })
-                    }
+                    { this.renderRows(records, side, isPanelActive) }
                 </Container>
             );
         } else {
             return null;
         }
+    }
+
+    renderRows(records, side, isPanelActive) {
+        let output = [];
+        
+        for(let record of records) {
+            let isActive = record.get('isSelected');
+            let className = 'row';
+
+            if (isPanelActive && isActive) {
+                className += ' row-is-active';
+            } else if (!isPanelActive && isActive) {
+                className += ' row-is-inactive';
+            }
+
+            output.push(
+                <Row key={this.props.side + record.get('key') } className={className} side={side} record={record} />
+            );
+        }
+
+        return output;
     }
 
     shouldComponentUpdate(nextProps, nextState) {

@@ -1,5 +1,5 @@
-import React from 'react';
-import { connect, Provider } from 'react-redux';
+import { h, Component } from 'preact';
+import { Provider } from 'preact-redux';
 
 import createStore from '../stores/store';
 
@@ -12,7 +12,7 @@ let store = createStore();
 
 document.addEventListener('keydown', (e) => { store.dispatch(keyPress(e)); });
 
-export default class App extends React.Component {    
+export default class App extends Component {    
     render() {
         return (
             <Provider store={ store }>

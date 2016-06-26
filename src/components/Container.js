@@ -1,7 +1,6 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import { h, Component } from 'preact';
 
-export default class Container extends React.Component {
+export default class Container extends Component {
     render() {
         return (
             <div

@@ -1,12 +1,12 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import { h, Component } from 'preact';
+import { connect } from 'preact-redux';
 import { findIndex } from 'lodash';
 
 import Container from './Container';
 
 import { panelSetActiveRecord } from '../actions/panels';
 
-class Row extends React.Component {
+class Row extends Component {
     handleOnClick(record) {
         this.props.dispatch(
             panelSetActiveRecord(
@@ -33,4 +33,4 @@ class Row extends React.Component {
     }
 }
 
-export default connect()(Row);
+export default connect( () => ({}) )(Row);

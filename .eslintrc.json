@@ -23,7 +23,7 @@
         ],
         "linebreak-style": ["error", "unix"],
         "quotes": ["warn", "single"],
-        "semi": ["warn", "always"],
+        "semi": ["warn", "always", { "omitLastInOneLineBlock": true }],
         "no-unused-vars": ["off", {"vars": "local", "args": "none" }],
         "no-console": ["warn"]
     }

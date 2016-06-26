@@ -1,5 +1,5 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import { h, Component } from 'preact';
+import { connect } from 'preact-redux';
 import { findIndex } from 'lodash';
 import showdown from 'showdown';
 
@@ -10,7 +10,7 @@ import { panelLoadContent } from '../actions/panels';
 
 import FileUtils from '../utils/FileUtils';
 
-class PreviewPanel extends React.Component {
+class PreviewPanel extends Component {
     componentDidMount() {
     }
 
