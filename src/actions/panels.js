@@ -8,3 +8,10 @@ export function panelLoadContent(side, path) {
         path, side
     };
 }
+
+export function panelSetActiveRecord(side, title) {
+    return {
+        type: PANEL_SET_ACTIVE_RECORD,
+        side, title
+    };
+}
