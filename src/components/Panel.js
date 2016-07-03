@@ -99,6 +99,10 @@ class Panel extends Component {
         let activePath = nextProps.panels.getIn([side, 'activePath']);
         if (oldActiveRecord !== activeRecord) return true;
 
+        let oldSelectedItemsStamp = this.props.panels.getIn([side, 'selectedItemsStamp']);
+        let selectedItemsStamp = nextProps.panels.getIn([side, 'selectedItemsStamp']);
+        if (oldSelectedItemsStamp !== selectedItemsStamp) return true;
+
         return false;
     }
 }

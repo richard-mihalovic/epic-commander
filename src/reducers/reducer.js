@@ -1,5 +1,5 @@
 import { PANEL_LOAD_CONTENT, PANEL_SET_ACTIVE_RECORD, PANEL_TOGGLE_SHOW_HIDDEN_FILES } from '../actions/panels';
-import { KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, KEY_TAB, KEY_ENTER, KEY_H, KEY_P, KEY_Z } from '../actions/keyboard';
+import { KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, KEY_TAB, KEY_ENTER, KEY_SPACE, KEY_H, KEY_P, KEY_Z } from '../actions/keyboard';
 
 import FileUtils from '../utils/FileUtils';
 
@@ -16,12 +16,14 @@ let initialState = Immutable.fromJS({
         left: {
             activeRecord: undefined,
             activePath: homedir(),
+            selectedItemsStamp: 0,
             settings: { showHiddenFiles: false },
             records: []
         },
         right: {
             activeRecord: undefined,
             activePath: homedir(),
+            selectedItemsStamp: 0,
             settings: { showHiddenFiles: false },
             records: []
         }
@@ -64,6 +66,9 @@ export default function (state = initialState, action) {
 
         case KEY_Z:
             return togglePanelZoom(state);
+
+        case KEY_SPACE:
+            return toggleRecordIsSelected(state);
     }
     return state;
 }
@@ -80,7 +85,7 @@ function panelLoadContent(state, side, path, activeRecord) {
     ).setIn(
         ['panels', side, 'activeRecord'],
         activeRecord ? activeRecord : records.first().get('title')
-    );
+        );
 }
 
 function switchPanel(state) {
@@ -208,16 +213,35 @@ function togglePreview(state) {
     const side = state.get('activePanel');
     const previewPanel = state.get('previewPanel');
 
-    if(previewPanel === '') {
+    if (previewPanel === '') {
         return state.set(
-            'previewPanel', 
+            'previewPanel',
             side === 'left' ? 'right' : 'left'
         );
     } else {
-        return state.set('previewPanel', '');        
+        return state.set('previewPanel', '');
     }
 }
 
 function isPanelZoomed(state) {
     return state.get('zoomedPanel') !== '';
+}
+
+function toggleRecordIsSelected(state) {
+    let side = state.get('activePanel');
+    let records = state.getIn(['panels', side, 'records']);
+    let activeRecord = state.getIn(['panels', side, 'activeRecord']);
+
+    let recordIndex = records.findIndex((item) => {
+        return item.get('title') === activeRecord;
+    });
+
+    let updatedRecords = records.update(
+        recordIndex,
+        (item) => { return item.set('isSelected', !item.get('isSelected')) }
+    );
+
+    return state
+        .setIn(['panels', side, 'selectedItemsStamp'], new Date())
+        .setIn(['panels', side, 'records'], updatedRecords);
 }

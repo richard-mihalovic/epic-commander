@@ -23,6 +23,7 @@ class Row extends Component {
                 onClick={ () => { this.handleOnClick(record) } }
             >
                 <div className="column_title">
+                    { record.get('isSelected') ? '*' : '' }
                     { record.get('title') }
                 </div>
                 <div className="column_size">

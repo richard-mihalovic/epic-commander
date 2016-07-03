@@ -12,9 +12,9 @@ class Window extends Component {
 
         return (
             <Container className="window">
-                { previewPanel === 'left' ? <PreviewPanel side={side} /> : <Panel side="left" /> }
+                { previewPanel === 'left' ? <PreviewPanel /> : <Panel side="left" /> }
                 <Container className="panel-separator" />
-                { previewPanel === 'right' ? <PreviewPanel/> : <Panel side="right" /> } 
+                { previewPanel === 'right' ? <PreviewPanel /> : <Panel side="right" /> } 
             </Container>
         );
     }

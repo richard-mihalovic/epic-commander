@@ -15,6 +15,7 @@ export default class FileUtils {
                 title: upDir,
                 dir: true,
                 size: '⇧',
+                isSelected: false,
                 isActive: presetActiveRecord ? false : true
             });
         }
@@ -45,6 +46,7 @@ export default class FileUtils {
                     title: file,
                     dir: isDirectory,
                     size: isDirectory ? 'DIR' : filesize(stat.size),
+                    isSelected: false,
                     isActive
                 });
 
