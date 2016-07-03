@@ -59,7 +59,7 @@ class Panel extends Component {
         let output = [];
         
         for(let record of records) {
-            let isActive = record.get('isSelected');
+            let isActive = record.get('isActive');
             let className = 'row';
 
             if (isPanelActive && isActive) {

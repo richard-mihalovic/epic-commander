@@ -20,7 +20,7 @@ class Row extends Component {
         return (
             <Container
                 className={ record.get('dir') ? this.props.className + ' dir' : this.props.className }
-                onClick={ () => { this.handleOnClick(record); } }
+                onClick={ () => { this.handleOnClick(record) } }
             >
                 <div className="column_title">
                     { record.get('title') }

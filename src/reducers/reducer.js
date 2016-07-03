@@ -80,7 +80,7 @@ function panelLoadContent(state, side, path, activeRecord) {
     ).setIn(
         ['panels', side, 'activeRecord'],
         activeRecord ? activeRecord : records.first().get('title')
-        );
+    );
 }
 
 function switchPanel(state) {
@@ -120,11 +120,11 @@ function moveCursorUp(state) {
     let records = state.getIn(['panels', side, 'records']);
     let index = records.findIndex((record) => record.get('title') === activeRecord);
 
-    if (index <= 0) { return state; }
+    if (index <= 0) { return state }
 
     let updatedRecords = records
-        .set(index, records.get(index).set('isSelected', false))
-        .set(index - 1, records.get(index - 1).set('isSelected', true));
+        .set(index, records.get(index).set('isActive', false))
+        .set(index - 1, records.get(index - 1).set('isActive', true));
 
     return state
         .setIn(['panels', side, 'records'], updatedRecords)
@@ -137,11 +137,11 @@ function moveCursorDown(state) {
     let records = state.getIn(['panels', side, 'records']);
     let index = records.findIndex((record) => record.get('title') === activeRecord);
 
-    if (index >= records.size - 1) { return state; }
+    if (index >= records.size - 1) { return state }
 
     let updatedRecords = records
-        .set(index, records.get(index).set('isSelected', false))
-        .set(index + 1, records.get(index + 1).set('isSelected', true));
+        .set(index, records.get(index).set('isActive', false))
+        .set(index + 1, records.get(index + 1).set('isActive', true));
 
     return state
         .setIn(['panels', side, 'records'], updatedRecords)
@@ -171,7 +171,7 @@ function setActiveRecord(state, side, title) {
     let recordsProcessed = Immutable.List([]);
     for (let record of records) {
         recordsProcessed = recordsProcessed.push(
-            record.set('isSelected', record.get('title') === title)
+            record.set('isActive', record.get('title') === title)
         );
     }
 

@@ -10,7 +10,7 @@ import { keyPress } from '../actions/keyboard';
 
 let store = createStore();
 
-document.addEventListener('keydown', (e) => { store.dispatch(keyPress(e)); });
+document.addEventListener('keydown', (e) => { store.dispatch(keyPress(e)) });
 
 export default class App extends Component {    
     render() {

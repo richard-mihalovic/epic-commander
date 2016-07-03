@@ -6,12 +6,5 @@ export function panelLoadContent(side, path) {
     return {
         type: PANEL_LOAD_CONTENT,
         path, side
-    }
-}
-
-export function panelSetActiveRecord(side, title) {
-    return {
-        type: PANEL_SET_ACTIVE_RECORD,
-        side, title
-    }
+    };
 }

@@ -15,7 +15,7 @@ export default class FileUtils {
                 title: upDir,
                 dir: true,
                 size: '⇧',
-                isSelected: presetActiveRecord ? false : true
+                isActive: presetActiveRecord ? false : true
             });
         }
 
@@ -27,9 +27,9 @@ export default class FileUtils {
             const isHiddenFile = file.startsWith('.');
             let addFileToList = true;
 
-            let isSelected = path === pathSeparator && i === 1;
+            let isActive = path === pathSeparator && i === 1;
             if(presetActiveRecord) {
-                isSelected = file === presetActiveRecord;
+                isActive = file === presetActiveRecord;
             }
 
             if (isHiddenFile && !showHiddenFiles) {
@@ -45,7 +45,7 @@ export default class FileUtils {
                     title: file,
                     dir: isDirectory,
                     size: isDirectory ? 'DIR' : filesize(stat.size),
-                    isSelected
+                    isActive
                 });
 
                 i++;
