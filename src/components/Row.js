@@ -17,13 +17,14 @@ class Row extends Component {
 
     render() {
         let record = this.props.record;
+        let containerClassName = record.get('dir') ? this.props.className + ' dir' : this.props.className;
+        containerClassName += record.get('isSelected') ? ' selected' : '';
         return (
             <Container
-                className={ record.get('dir') ? this.props.className + ' dir' : this.props.className }
+                className={ containerClassName }
                 onClick={ () => { this.handleOnClick(record) } }
             >
                 <div className="column_title">
-                    { record.get('isSelected') ? '*' : '' }
                     { record.get('title') }
                 </div>
                 <div className="column_size">
