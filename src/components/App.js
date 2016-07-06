@@ -3,6 +3,7 @@ import { Provider } from 'preact-redux';
 
 import createStore from '../stores/store';
 
+import AddressBar from './AddressBar';
 import Container from './Container';
 import Window from './Window';
 
@@ -17,6 +18,7 @@ export default class App extends Component {
         return (
             <Provider store={ store }>
                 <Container className="container">
+                    <AddressBar />
                     <Window />
                 </Container>
             </Provider>

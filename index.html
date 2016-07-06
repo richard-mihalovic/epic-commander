@@ -19,7 +19,8 @@
 
         #app {
             width: 100%;
-            height: 100%
+            height: 100%;
+            background-color: #000080;
         }
 
         .container {
@@ -33,9 +34,21 @@
         .window {
             display: flex;
             flex: 1;
-            background-color: #000080;
         }
 
+        .address_bar {
+            display: flex;
+            background: #0000a0;
+        }
+
+        .address_bar_left, .address_bar_right {
+            flex: 1;
+            text-align: center;
+            color: white;
+            font-size: 0.8rem;
+            padding: 0.1rem;
+        }
+        
         .preview_panel {
             flex: 1;
             overflow: auto;
@@ -59,8 +72,8 @@
         }
 
         .panel-separator {
-            background: #000055;
-            width: 0.25em;
+            background: #000060;
+            width: 2px;
         }
 
         .panel .row-is-active {
