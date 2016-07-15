@@ -7,13 +7,26 @@ import Container from './Container';
 
 class AddressBar extends Component {
     render() {
-        const address_left = this.props.address_left.replace(homedir(), '~');
-        const address_right = this.props.address_right.replace(homedir(), '~');
+        const zoomedPanel = this.props.zoomedPanel;
+        const previewPanel = this.props.previewPanel;
+        
+        let addressLeft = this.props.addressLeft.replace(homedir(), '~');
+        let addressRight = this.props.addressRight.replace(homedir(), '~');
+
+        if (previewPanel === 'left') addressLeft = this.props.activeRecordRight;
+        if (previewPanel === 'right') addressRight = this.props.activeRecordLeft;
+
         return (
             <Container className="address_bar">
-                <AddressBarItem side="left" address={ address_left } />
-                <Container className="panel-separator" />
-                <AddressBarItem side="right" address={ address_right } />
+                { zoomedPanel === '' || zoomedPanel === 'left' ?
+                    <AddressBarItem side="left" address={ addressLeft } centerText={previewPanel === 'left'} /> : null
+                }
+                { zoomedPanel === '' ?
+                    <Container className="panel-separator" /> : null
+                }
+                { zoomedPanel === '' || zoomedPanel === 'right' ?
+                    <AddressBarItem side="right" address={ addressRight } centerText={previewPanel === 'right'} /> : null
+                }
             </Container>
         );
     }
@@ -21,7 +34,11 @@ class AddressBar extends Component {
 
 export default connect(
     (state) => ({
-        address_left: state.get('data').getIn(['panels', 'left', 'activePath']),
-        address_right: state.get('data').getIn(['panels', 'right', 'activePath'])
+        previewPanel: state.get('data').get('previewPanel'),
+        zoomedPanel: state.get('data').get('zoomedPanel'),
+        addressLeft: state.get('data').getIn(['panels', 'left', 'activePath']),
+        addressRight: state.get('data').getIn(['panels', 'right', 'activePath']),
+        activeRecordLeft: state.get('data').getIn(['panels', 'left', 'activeRecord']),
+        activeRecordRight: state.get('data').getIn(['panels', 'right', 'activeRecord'])
     })
 )(AddressBar);

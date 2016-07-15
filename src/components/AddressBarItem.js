@@ -4,7 +4,12 @@ import Container from './Container';
 
 export default class AddressBarItem extends Component {
     render() {
-        const className = 'address_bar_' + this.props.side;
+        let className = 'address_bar_' + this.props.side;
+        
+        if (this.props.centerText) {
+            className += ' center_text';
+        }
+
         return (
             <Container className={ className }>
                 { this.props.address }

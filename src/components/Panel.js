@@ -91,6 +91,10 @@ class Panel extends Component {
         let activePanel = nextProps.activePanel;
         if (oldActivePanel !== activePanel) return true;
 
+        let oldPreviewPanel = this.props.previewPanel;
+        let previewPanel = nextProps.previewPanel;
+        if (oldPreviewPanel !== previewPanel) return true;
+
         let oldActiveRecord = this.props.panels.getIn([side, 'activeRecord']);
         let activeRecord = nextProps.panels.getIn([side, 'activeRecord']);
         if (oldActivePath !== activePath) return true;
@@ -111,6 +115,7 @@ export default connect(
     (state) => ({
         activePanel: state.get('data').get('activePanel'),
         zoomedPanel: state.get('data').get('zoomedPanel'),
+        previewPanel: state.get('data').get('previewPanel'),
         panels: state.get('data').get('panels')
     })
 )(Panel);
