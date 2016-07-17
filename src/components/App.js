@@ -4,6 +4,7 @@ import { Provider } from 'preact-redux';
 import createStore from '../stores/store';
 
 import AddressBar from './AddressBar';
+import BottomBar from './BottomBar';
 import Container from './Container';
 import Window from './Window';
 
@@ -20,6 +21,7 @@ export default class App extends Component {
                 <Container className="container">
                     <AddressBar />
                     <Window />
+                    <BottomBar />
                 </Container>
             </Provider>
         )

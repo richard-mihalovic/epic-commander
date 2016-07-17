@@ -9,8 +9,7 @@
             display: none;
         }
 
-        html,
-        body {
+        html, body {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -36,7 +35,7 @@
             flex: 1;
         }
 
-        .address_bar {
+        .address_bar, .bottom_bar {
             display: flex;
             background: #0000a0;
         }
@@ -44,6 +43,18 @@
         .address_bar_left, .address_bar_right {
             flex: 1;
             color: white;
+            font-size: 1rem;
+            padding: 0.3rem;
+
+            /* dont wrap text */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;            
+        }
+
+        .bottom_bar_left, .bottom_bar_right {
+            flex: 1;
+            color: aqua;
             font-size: 1rem;
             padding: 0.3rem;
 
@@ -128,7 +139,7 @@
 </head>
 
 <body>
-    <div id="app"></div>
+    <div id="app" />
 
     <script src="http://localhost:8080/webpack-dev-server.js"></script>
     <script src="http://localhost:8080/built/bundle.js"></script>
