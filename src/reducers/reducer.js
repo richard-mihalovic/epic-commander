@@ -241,7 +241,9 @@ function toggleRecordIsSelected(state) {
         (item) => { return item.set('isSelected', !item.get('isSelected')) }
     );
 
-    return state
+    let selectRecorState = state
         .setIn(['panels', side, 'selectedItemsStamp'], new Date())
         .setIn(['panels', side, 'records'], updatedRecords);
+
+    return moveCursorDown(selectRecorState);
 }
