@@ -1,5 +1,6 @@
 import { PANEL_LOAD_CONTENT, PANEL_SET_ACTIVE_RECORD, PANEL_TOGGLE_SHOW_HIDDEN_FILES } from '../actions/panels';
 import { KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, KEY_TAB, KEY_ENTER, KEY_SPACE, KEY_H, KEY_P, KEY_Z } from '../actions/keyboard';
+import { KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10  } from '../actions/keyboard';
 
 import FileUtils from '../utils/FileUtils';
 
@@ -69,6 +70,19 @@ export default function (state = initialState, action) {
 
         case KEY_SPACE:
             return toggleRecordIsSelected(state);
+
+        case KEY_F1:
+        case KEY_F2:
+        case KEY_F3:
+        case KEY_F4:
+        case KEY_F5:
+        case KEY_F6:
+        case KEY_F7:
+        case KEY_F8:
+        case KEY_F9:
+        case KEY_F10:
+            alert('Not implemented.');
+            return state;
     }
     return state;
 }

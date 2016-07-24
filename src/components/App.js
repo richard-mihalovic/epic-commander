@@ -5,6 +5,7 @@ import createStore from '../stores/store';
 
 import AddressBar from './AddressBar';
 import BottomBar from './BottomBar';
+import BottomMenu from './BottomMenu';
 import Container from './Container';
 import Window from './Window';
 
@@ -14,7 +15,7 @@ let store = createStore();
 
 document.addEventListener('keydown', (e) => { store.dispatch(keyPress(e)) });
 
-export default class App extends Component {    
+export default class App extends Component {
     render() {
         return (
             <Provider store={ store }>
@@ -22,8 +23,9 @@ export default class App extends Component {
                     <AddressBar />
                     <Window />
                     <BottomBar />
+                    <BottomMenu />
                 </Container>
             </Provider>
-        )
+        );
     }
 }

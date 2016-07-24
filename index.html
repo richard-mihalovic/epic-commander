@@ -103,6 +103,8 @@
         .panel .row {
             color: white;
             display: flex;
+            margin-left: 0.3em;
+            margin-right: 0.3em;
         }
 
         .panel .dir {
@@ -115,7 +117,6 @@
 
         .panel .row .column_title {
             flex: 1;
-            margin-left: 0.25em;
 
             /* dont wrap text */
             white-space: nowrap;
@@ -130,6 +131,33 @@
         .footer {
             display: flex;
             flex: 0.05;
+        }
+
+        .bottom_menu {
+            display: flex;
+            font-size: 0.8em;
+        }
+
+        .bottom_menu_item {
+            flex: 1;
+            padding-top: 0.5em;
+            padding-bottom: 0.5em;
+            padding-left: 0.5em;
+            /*border-right: thin solid blue;*/
+        }
+
+        .bottom_menu_item .key {
+            color: yellow;
+        }
+
+        .bottom_menu_item .label {
+            padding-left: 0.5em;
+            color: cyan;
+        }
+
+        .horizontal_separator {
+            background: #000060;
+            height: 2px;
         }
 
         .center_text {
