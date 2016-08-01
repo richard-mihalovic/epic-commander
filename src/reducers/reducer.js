@@ -106,6 +106,9 @@ function switchPanel(state) {
     // dont switch panel side if panel is zoomed
     if (isPanelZoomed(state)) return state;
 
+    // dont switch panel side if panel is in preview mode
+    if (isInPreviewMode(state)) return state;
+
     return state.set(
         'activePanel',
         state.get('activePanel') === 'left' ? 'right' : 'left'
@@ -239,6 +242,10 @@ function togglePreview(state) {
 
 function isPanelZoomed(state) {
     return state.get('zoomedPanel') !== '';
+}
+
+function isInPreviewMode(state) {
+    return state.get('previewPanel') !== '';
 }
 
 function toggleRecordIsSelected(state) {
