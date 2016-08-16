@@ -2,13 +2,19 @@ import { PANEL_LOAD_CONTENT, PANEL_SET_ACTIVE_RECORD, PANEL_TOGGLE_SHOW_HIDDEN_F
 import { KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, KEY_TAB, KEY_ENTER, KEY_SPACE, KEY_H, KEY_P, KEY_Z } from '../actions/keyboard';
 import { KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10  } from '../actions/keyboard';
 
+import { WINDOW_ACTION_SET, WINDOW_CLOSE_MODAL } from '../actions/window';
+import { COMMAND_CREATE_DIRECTORY, COMMAND_DELETE_FILES } from '../actions/commands';
+
 import FileUtils from '../utils/FileUtils';
 
 import Immutable from 'immutable';
 import { homedir } from 'os';
 import { resolve, sep as separtor } from 'path';
+import { existsSync, mkdirSync, rmdirSync } from 'fs';
 
 let initialState = Immutable.fromJS({
+    action: 'browse',
+
     activePanel: 'left',
     zoomedPanel: '',
     previewPanel: '',
@@ -35,12 +41,35 @@ export default function (state = initialState, action) {
     console.log(action.type);
 
     switch (action.type) {
+        case WINDOW_ACTION_SET:
+            return state.set('action', action.windowAction);
+
+        case WINDOW_CLOSE_MODAL:
+            return state.set('action', 'browse');
+
         case PANEL_LOAD_CONTENT:
             return panelLoadContent(state, action.side, action.path);
 
         case PANEL_SET_ACTIVE_RECORD:
             return setActiveRecord(state, action.side, action.title);
 
+        case COMMAND_CREATE_DIRECTORY:
+            return commandCreateDirectory(state, action.path, action.directory);
+
+        case COMMAND_DELETE_FILES:
+            return commandDeleteFiles(state, action.path, action.records);
+    }
+
+    const isModalWindowActive = state.get('action') !== 'browse';
+    if (isModalWindowActive) {
+        return processKeysInModalMode(state, action);
+    } else {
+        return processKeysInBrowseMode(state, action);
+    }
+}
+
+function processKeysInBrowseMode(state, action) {
+    switch (action.type) {
         case KEY_TAB:
             return switchPanel(state);
 
@@ -71,19 +100,28 @@ export default function (state = initialState, action) {
         case KEY_SPACE:
             return toggleRecordIsSelected(state);
 
+        case KEY_F7:
+            return state.set('action', 'createDirectory');
+
+        case KEY_F8:
+            return state.set('action', 'deleteFiles');
+
         case KEY_F1:
         case KEY_F2:
         case KEY_F3:
         case KEY_F4:
         case KEY_F5:
         case KEY_F6:
-        case KEY_F7:
-        case KEY_F8:
         case KEY_F9:
         case KEY_F10:
             alert('Not implemented.');
             return state;
     }
+
+    return state; 
+}
+
+function processKeysInModalMode(state, action) {
     return state;
 }
 
@@ -267,4 +305,57 @@ function toggleRecordIsSelected(state) {
         .setIn(['panels', side, 'records'], updatedRecords);
 
     return moveCursorDown(selectRecorState);
+}
+
+function commandCreateDirectory(state, path, directory) {
+    let fullPath = path + '/' + directory;
+    try {
+        if ( !existsSync(fullPath) ) {
+            mkdirSync(fullPath);
+        }
+
+        let side = state.get('activePanel');
+        return panelLoadContent(state, side, path, directory);
+
+    } catch (err) {
+        alert(`Failed to create directory '${fullPath}'.`);
+        console.log(err);
+    }
+
+    return state;
+}
+
+function commandDeleteFiles(state, path, records) {
+    let record = records[0];
+    let fullPath = path + '/' + record;
+
+    try {
+        if ( existsSync(fullPath) ) {
+            rmdirSync(fullPath);
+        }
+
+        let side = state.get('activePanel');
+        return panelLoadContent(state, side, path, '');
+
+    } catch (err) {
+        alert(`Failed to delete directory '${fullPath}'.`);
+        console.log(err);
+    }
+
+    return state;
+
+//     var fs = require('fs');
+// var deleteFolderRecursive = function(path) {
+//   if( fs.existsSync(path) ) {
+//     fs.readdirSync(path).forEach(function(file,index){
+//       var curPath = path + "/" + file;
+//       if(fs.lstatSync(curPath).isDirectory()) { // recurse
+//         deleteFolderRecursive(curPath);
+//       } else { // delete file
+//         fs.unlinkSync(curPath);
+//       }
+//     });
+//     fs.rmdirSync(path);
+//   }
+// };  
 }

@@ -1,3 +1,5 @@
+import { WINDOW_CLOSE_MODAL } from './window';
+
 export const KEY_UP = 'KEY_UP';
 export const KEY_DOWN = 'KEY_DOWN';
 export const KEY_LEFT = 'KEY_LEFT';
@@ -22,9 +24,14 @@ export const KEY_F8 = 'KEY_F8';
 export const KEY_F9 = 'KEY_F9';
 export const KEY_F10 = 'KEY_F10';
 
-export function keyPress(e) {
+export function keyPress(e, isModalActive) {
     let action = { type: 'unknown' };
     let key = e.code;
+
+    if(isModalActive) { 
+        if (key === 'Escape') action.type = WINDOW_CLOSE_MODAL;
+        return action;
+    }
 
     if (key === 'ArrowUp') action.type = KEY_UP;
     else if (key === 'ArrowDown') action.type = KEY_DOWN;

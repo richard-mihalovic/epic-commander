@@ -2,13 +2,13 @@ import { h, Component } from 'preact';
 
 export default class Container extends Component {
     render() {
+        let hasFocus = this.props.hasFocus;
+
         return (
-            <div
-                className={this.props.className}
-                onClick={ (e) => { this.props.onClick ? this.props.onClick() : () => {}; e.preventDefault() } }
-            >
-                {this.props.children}
-            </div>
-        );
+            hasFocus ? 
+            <div { ...this.props } tabIndex="-1" >{ this.props.children }</div> 
+            : 
+            <div { ...this.props }>{ this.props.children }</div>
+        ); 
     }
 }
