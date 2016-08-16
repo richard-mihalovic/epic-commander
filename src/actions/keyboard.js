@@ -12,6 +12,7 @@ export const KEY_ESCAPE = 'KEY_ESCAPE';
 export const KEY_SPACE = 'KEY_SPACE';
 export const KEY_H = 'KEY_H';
 export const KEY_P = 'KEY_P';
+export const KEY_X = 'KEY_X';
 export const KEY_Z = 'KEY_Z';
 export const KEY_F1 = 'KEY_F1';
 export const KEY_F2 = 'KEY_F2';
@@ -44,6 +45,7 @@ export function keyPress(e, isModalActive) {
     else if (key === 'KeyH') action.type = KEY_H;
     else if (key === 'KeyP') action.type = KEY_P;
     else if (key === 'KeyZ') action.type = KEY_Z;
+    else if (key === 'KeyX') action.type = KEY_X;
     else if (key === 'F1') action.type = KEY_F1;
     else if (key === 'F2') action.type = KEY_F2;
     else if (key === 'F3') action.type = KEY_F3;

@@ -1,5 +1,5 @@
 import { PANEL_LOAD_CONTENT, PANEL_SET_ACTIVE_RECORD, PANEL_TOGGLE_SHOW_HIDDEN_FILES } from '../actions/panels';
-import { KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, KEY_TAB, KEY_ENTER, KEY_SPACE, KEY_H, KEY_P, KEY_Z } from '../actions/keyboard';
+import { KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, KEY_TAB, KEY_ENTER, KEY_SPACE, KEY_H, KEY_P, KEY_X, KEY_Z } from '../actions/keyboard';
 import { KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10  } from '../actions/keyboard';
 
 import { WINDOW_ACTION_SET, WINDOW_CLOSE_MODAL } from '../actions/window';
@@ -94,6 +94,9 @@ function processKeysInBrowseMode(state, action) {
         case KEY_P:
             return togglePreview(state);
 
+        case KEY_X:
+            return swapPanels(state);
+
         case KEY_Z:
             return togglePanelZoom(state);
 
@@ -126,6 +129,8 @@ function processKeysInModalMode(state, action) {
 }
 
 function panelLoadContent(state, side, path, activeRecord) {
+    activeRecord = activeRecord === '..' ? undefined : activeRecord;
+
     let showHiddenFiles = state.getIn(['panels', side, 'settings', 'showHiddenFiles']);
     let records = Immutable.fromJS(
         FileUtils.scanPath(path, activeRecord, showHiddenFiles)
@@ -276,6 +281,25 @@ function togglePreview(state) {
     } else {
         return state.set('previewPanel', '');
     }
+}
+
+function swapPanels(state) {
+    const side = state.get('activePanel');
+    const leftPanelPath = state.getIn(['panels', 'left', 'activePath']);
+    const rightPanelPath = state.getIn(['panels', 'right', 'activePath']);
+    const leftPanelRecord = state.getIn(['panels', 'left', 'activeRecord']);
+    const rightPanelRecord = state.getIn(['panels', 'right', 'activeRecord']);
+
+    let stateNext = state
+        .set('activePanel', side === 'left' ? 'right' : 'left')
+        .setIn(['panels', 'left', 'activeRecord'], rightPanelRecord)
+        .setIn(['panels', 'right', 'activeRecord'], leftPanelRecord)
+        .setIn(['panels', 'left', 'activePath'], rightPanelPath)
+        .setIn(['panels', 'right', 'activePath'], leftPanelPath);
+
+    stateNext = panelLoadContent(stateNext, 'left', rightPanelPath, rightPanelRecord);
+    stateNext = panelLoadContent(stateNext, 'right', leftPanelPath, leftPanelRecord);
+    return stateNext;        
 }
 
 function isPanelZoomed(state) {
