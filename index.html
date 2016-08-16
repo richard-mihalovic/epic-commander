@@ -163,6 +163,73 @@
         .center_text {
             text-align: center;
         }
+
+        .modal {
+            display: flex;
+            position: absolute;
+            left: 0; top: 0; 
+            width: 100%; height: 100%; 
+            background-color: rgba(0, 0, 0, 0.75); 
+            align-items: center;
+            justify-content: center;             
+        }
+
+        .dialog {
+            width: 50%; 
+            background: #000060;
+            padding: 1em;
+
+            outline: 0px solid tranparent;
+        }
+
+        .dialog:focus{
+            outline: none;
+        }
+
+        .dialog .title {
+            text-align: center;
+            padding-bottom: 1em;
+            margin-bottom: 1em;
+            border-bottom: thin solid steelblue;
+            color: lightsteelblue;
+        }
+
+        .dialog .content {
+            display: flex;
+            color: lightsteelblue;
+        }
+
+        .dialog .text_input {
+            flex: 1;
+            padding: 0.5em;
+            font-size: 1.1em;
+        }
+
+        .dialog .buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+
+            margin-top: 1em;
+        }
+
+        .dialog .button {
+            width: 46%;
+            text-align: center;
+            padding: 0.5em;
+            background: gray;
+        }
+
+        .dialog .button_normal {
+        }
+
+        .dialog .button_primary {
+        }
+
+        .dialog .button_selected {
+            background: #00aaaa;
+            color: yellow;
+        }        
     </style>
 </head>
 
