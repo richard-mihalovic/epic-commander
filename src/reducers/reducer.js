@@ -42,6 +42,7 @@ export default function (state = initialState, action) {
 
     switch (action.type) {
         case WINDOW_ACTION_SET:
+            console.log(action.windowAction);
             return state.set('action', action.windowAction);
 
         case WINDOW_CLOSE_MODAL:
@@ -103,14 +104,16 @@ function processKeysInBrowseMode(state, action) {
         case KEY_SPACE:
             return toggleRecordIsSelected(state);
 
+        case KEY_F2:
+            return state.set('action', 'command-rename');
+
         case KEY_F7:
-            return state.set('action', 'createDirectory');
+            return state.set('action', 'command-create-directory');
 
         case KEY_F8:
-            return state.set('action', 'deleteFiles');
+            return state.set('action', 'command-delete');
 
         case KEY_F1:
-        case KEY_F2:
         case KEY_F3:
         case KEY_F4:
         case KEY_F5:

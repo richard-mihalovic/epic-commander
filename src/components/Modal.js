@@ -4,6 +4,7 @@ import { connect } from 'preact-redux';
 import Container from './Container';
 import CreateDirectoryDialog from './modals/CreateDirectoryDialog';
 import DeleteFilesDialog from './modals/DeleteFilesDialog';
+import RenameDialog from './modals/RenameDialog';
 
 class Modal extends Component {
     render() {
@@ -11,11 +12,14 @@ class Modal extends Component {
                 
         let dialog = null;
         switch (action) {
-            case 'createDirectory':
+            case 'command-create-directory':
                 dialog = <CreateDirectoryDialog />;
                 break;
-            case 'deleteFiles':
+            case 'command-delete':
                 dialog = <DeleteFilesDialog />;
+                break;
+            case 'command-rename':
+                dialog = <RenameDialog />;
                 break;
         }
 
