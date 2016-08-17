@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, statSync } from 'fs';
+import { readdirSync, readFileSync, renameSync, statSync } from 'fs';
 import path from 'path';
 import filesize from 'filesize';
 import _ from 'lodash';
@@ -77,5 +77,15 @@ export default class FileUtils {
     /** Returns platform independent path separator. (unix: '/', win: '\') */
     static separator() {
         return path.sep;
+    }
+
+    static rename(from, to) {
+        try {
+            renameSync(from, to);
+            return true;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
     }
 }
