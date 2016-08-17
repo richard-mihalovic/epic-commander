@@ -4,15 +4,24 @@ import { findIndex } from 'lodash';
 
 import Container from './Container';
 
-import { panelSetActiveRecord } from '../actions/panels';
+import { panelLoadContent, panelSetActiveRecord } from '../actions/panels';
+import { KEY_ENTER } from './../actions/keyboard';
 
 class Row extends Component {
-    handleOnClick(record) {
+    handleClick(record) {
         this.props.dispatch(
             panelSetActiveRecord(
                 this.props.side, record.get('title')
             )
         );
+    }
+
+    handleDoubleClick(record) {
+        if(record.get('dir')) {
+            this.props.dispatch(
+                { type: KEY_ENTER }
+            );
+        }
     }
 
     render() {
@@ -22,7 +31,8 @@ class Row extends Component {
         return (
             <Container
                 className={ containerClassName }
-                onClick={ () => { this.handleOnClick(record) } }
+                onClick={ () => { this.handleClick(record) }}
+                onDblClick={ () => { this.handleDoubleClick(record) }}
             >
                 <div className="column_title">
                     { record.get('title') }
@@ -35,4 +45,4 @@ class Row extends Component {
     }
 }
 
-export default connect( () => ({}) )(Row);
+export default connect( (state) => ({}) )(Row);
