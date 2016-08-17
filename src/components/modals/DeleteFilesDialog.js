@@ -57,7 +57,7 @@ class DeleteFilesDialog extends Component {
             e.preventDefault();
         } else if (code === 'Enter') {
             this.processEnterKey();
-            e.preventDefault();
+            e.stopPropagation();
         }
     }
 
