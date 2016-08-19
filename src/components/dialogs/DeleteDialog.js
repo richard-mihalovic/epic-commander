@@ -11,7 +11,7 @@ const BUTTON_DELETE = 'DELETE';
 const BUTTON_CLOSE = 'CLOSE';
 const BUTTONS = [ BUTTON_DELETE, BUTTON_CLOSE ];
 
-class DeleteFilesDialog extends Component {
+class DeleteDialog extends Component {
     constructor(props) {
         super(props);
 
@@ -108,4 +108,4 @@ export default connect(
             ['panels', state.get('data').get('activePanel'), 'activeRecord']
         ),
     })
-)(DeleteFilesDialog);
+)(DeleteDialog);
