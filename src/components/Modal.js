@@ -2,9 +2,9 @@ import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
 
 import Container from './Container';
-import CreateDirectoryDialog from './modals/CreateDirectoryDialog';
-import DeleteFilesDialog from './modals/DeleteFilesDialog';
-import RenameDialog from './modals/RenameDialog';
+import CreateDirectoryDialog from './dialogs/CreateDirectoryDialog';
+import DeleteFilesDialog from './dialogs/DeleteFilesDialog';
+import RenameDialog from './dialogs/RenameDialog';
 
 class Modal extends Component {
     render() {
