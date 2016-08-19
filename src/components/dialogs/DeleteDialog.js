@@ -1,11 +1,13 @@
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
 
+import fs from 'fs-extra';
+
 import Container from './../Container';
 import Button from './elements/Button';
 
 import { setWindowAction, WINDOW_ACTION_BROWSE } from './../../actions/window';
-import { commandDeleteFiles } from './../../actions/commands';
+import { panelLoadContent, panelSetActiveRecord } from './../../actions/panels';
 
 const BUTTON_DELETE = 'DELETE';
 const BUTTON_CLOSE = 'CLOSE';
@@ -17,12 +19,19 @@ class DeleteDialog extends Component {
 
         this.state = {
             activeButtonIdx: 0,
-            activeButton: BUTTON_DELETE
+            activeButton: BUTTON_DELETE,
+
+            collectingRecords: true,
+            processingRecord: undefined,
+            filesToDelete: 0,
+            directoriesToDelete: 0
         };
     }
 
     componentDidMount() {
         document.getElementsByClassName('dialog')[0].focus();
+
+        this.collectFiles([ this.props.activePath + '/' + this.props.activeRecord ]);
     }
 
     closeDialog() {
@@ -31,9 +40,11 @@ class DeleteDialog extends Component {
 
     deleteFiles() {
         // TODO: add support for selected files/records
-        this.props.dispatch(
-            commandDeleteFiles(this.props.activePath, [this.props.activeRecord])
-        );
+        // this.props.dispatch(
+        //     commandDeleteFiles(this.props.activePath, [this.props.activeRecord])
+        // );
+
+        //this.collectFiles([ this.props.activePath + '/' + this.props.activeRecord ]);
 
         this.closeDialog();
     }
@@ -71,7 +82,54 @@ class DeleteDialog extends Component {
             default:
                 this.closeDialog();
         }
-    }    
+    }
+
+    collectFiles(recordsToDelete) {
+        let records = [];
+        let countFiles = 0;
+        let countDirs = 0;
+
+        // todo: delete all selected files
+        fs.walk(recordsToDelete[0])
+        .on('data', (item) => {            
+            if(item.path.endsWith('..')) return;
+
+            const isDir = item.stats.isDirectory();
+            countFiles += isDir ? 0 : 1;
+            countDirs += isDir ? 1 : 0;
+            
+            records.push({
+                path: item.path, isDir
+            });
+
+            this.setState(
+                Object.assign({}, this.state, {
+                    processingRecord: item.path,
+                    filesToDelete: countFiles,
+                    directoriesToDelete: countDirs
+                })
+            );          
+        })
+        .on('end', (files) => {
+            
+            // delete all files first
+            for(let record of records.reverse()) {
+                if (!record.isDir) {
+                    fs.removeSync(record.path);
+                }
+            }
+
+            // todo: remove all directories
+            // fs.removeSync(record.path);
+
+            this.props.dispatch(
+                panelLoadContent(this.props.side, this.props.activePath)
+            );
+            // this.props.dispatch(
+            //     panelSetActiveRecord(this.props.side, this.textInput.value)
+            // );            
+        });
+    }  
 
     render() {
         const activeButton = this.state.activeButton;
@@ -79,7 +137,7 @@ class DeleteDialog extends Component {
             <Container className="dialog" hasFocus="1" onKeyDown={ (e) => this.processKey(e) }>
                 <Container className="title">Delete file(s)</Container>
                 <Container className="content">
-                    <p style={{ flex: 1, textAlign: 'center', color: 'yellow', fontWeight: 'bold' }}>{ this.props.activeRecord }</p>
+                    { this.state.collectingRecords ? <p>Do you want to delete { this.state.filesToDelete } files and { this.state.directoriesToDelete } directories ? </p> : null }
                 </Container>
                 <Container className="buttons">
 
@@ -101,6 +159,7 @@ class DeleteDialog extends Component {
 
 export default connect(
     (state) => ({
+        side: state.get('data').get('activePanel'),
         activePath: state.get('data').getIn(
             ['panels', state.get('data').get('activePanel'), 'activePath']
         ),
