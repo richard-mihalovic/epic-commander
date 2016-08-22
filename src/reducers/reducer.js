@@ -3,7 +3,7 @@ import { KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_HOME, KEY_END, KEY_TAB, KEY_
 import { KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10  } from '../actions/keyboard';
 
 import { WINDOW_ACTION_SET, WINDOW_CLOSE_MODAL } from '../actions/window';
-import { COMMAND_CREATE_DIRECTORY, COMMAND_DELETE_FILES } from '../actions/commands';
+import { COMMAND_CREATE_DIRECTORY } from '../actions/commands';
 
 import FileUtils from '../utils/FileUtils';
 
@@ -42,7 +42,6 @@ export default function (state = initialState, action) {
 
     switch (action.type) {
         case WINDOW_ACTION_SET:
-            console.log(action.windowAction);
             return state.set('action', action.windowAction);
 
         case WINDOW_CLOSE_MODAL:
@@ -56,9 +55,6 @@ export default function (state = initialState, action) {
 
         case COMMAND_CREATE_DIRECTORY:
             return commandCreateDirectory(state, action.path, action.directory);
-
-        case COMMAND_DELETE_FILES:
-            return commandDeleteFiles(state, action.path, action.records);
     }
 
     const isModalWindowActive = state.get('action') !== 'browse';
@@ -350,39 +346,4 @@ function commandCreateDirectory(state, path, directory) {
     }
 
     return state;
-}
-
-function commandDeleteFiles(state, path, records) {
-    let record = records[0];
-    let fullPath = path + '/' + record;
-
-    try {
-        if ( existsSync(fullPath) ) {
-            rmdirSync(fullPath);
-        }
-
-        let side = state.get('activePanel');
-        return panelLoadContent(state, side, path, '');
-
-    } catch (err) {
-        alert(`Failed to delete directory '${fullPath}'.`);
-        console.log(err);
-    }
-
-    return state;
-
-//     var fs = require('fs');
-// var deleteFolderRecursive = function(path) {
-//   if( fs.existsSync(path) ) {
-//     fs.readdirSync(path).forEach(function(file,index){
-//       var curPath = path + "/" + file;
-//       if(fs.lstatSync(curPath).isDirectory()) { // recurse
-//         deleteFolderRecursive(curPath);
-//       } else { // delete file
-//         fs.unlinkSync(curPath);
-//       }
-//     });
-//     fs.rmdirSync(path);
-//   }
-// };  
 }
