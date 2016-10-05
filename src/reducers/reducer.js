@@ -103,6 +103,9 @@ function processKeysInBrowseMode(state, action) {
         case KEY_F2:
             return state.set('action', 'command-rename');
 
+        case KEY_F5:
+            return state.set('action', 'command-copy');
+
         case KEY_F7:
             return state.set('action', 'command-create-directory');
 
@@ -112,7 +115,6 @@ function processKeysInBrowseMode(state, action) {
         case KEY_F1:
         case KEY_F3:
         case KEY_F4:
-        case KEY_F5:
         case KEY_F6:
         case KEY_F9:
         case KEY_F10:
@@ -135,13 +137,16 @@ function panelLoadContent(state, side, path, activeRecord) {
         FileUtils.scanPath(path, activeRecord, showHiddenFiles)
     );
 
-    return state.setIn(
-        ['panels', side, 'records'],
-        records
-    ).setIn(
-        ['panels', side, 'activeRecord'],
-        activeRecord ? activeRecord : records.first().get('title')
-        );
+    return state.withMutations( state => {
+        state
+            .setIn(
+                ['panels', side, 'records'],
+                records
+            ).setIn(
+                ['panels', side, 'activeRecord'],
+                activeRecord ? activeRecord : records.first().get('title')
+            );
+    });
 }
 
 function switchPanel(state) {
@@ -190,9 +195,11 @@ function moveCursorUp(state) {
         .set(index, records.get(index).set('isActive', false))
         .set(index - 1, records.get(index - 1).set('isActive', true));
 
-    return state
-        .setIn(['panels', side, 'records'], updatedRecords)
-        .setIn(['panels', side, 'activeRecord'], records.get(index - 1).get('title'));
+    return state.withMutations( state => {
+        state
+            .setIn(['panels', side, 'records'], updatedRecords)
+            .setIn(['panels', side, 'activeRecord'], records.get(index - 1).get('title'));
+    });
 }
 
 function moveCursorDown(state) {
@@ -207,9 +214,11 @@ function moveCursorDown(state) {
         .set(index, records.get(index).set('isActive', false))
         .set(index + 1, records.get(index + 1).set('isActive', true));
 
-    return state
-        .setIn(['panels', side, 'records'], updatedRecords)
-        .setIn(['panels', side, 'activeRecord'], records.get(index + 1).get('title'));
+    return state.withMutations( state => {
+        state
+            .setIn(['panels', side, 'records'], updatedRecords)
+            .setIn(['panels', side, 'activeRecord'], records.get(index + 1).get('title'));
+    });
 }
 
 function moveToFirstRecordInPanel(state) {
@@ -239,10 +248,12 @@ function setActiveRecord(state, side, title) {
         );
     }
 
-    return state
-        .set('activePanel', side)
-        .setIn(['panels', side, 'activeRecord'], title)
-        .setIn(['panels', side, 'records'], recordsProcessed);
+    return state.withMutations( state => {
+        state
+            .set('activePanel', side)
+            .setIn(['panels', side, 'activeRecord'], title)
+            .setIn(['panels', side, 'records'], recordsProcessed);
+    });
 }
 
 function enterPanelRecord(state) {
@@ -261,9 +272,11 @@ function enterPanelRecord(state) {
 
     fullPath = resolve(fullPath);
 
-    let updatedState = state
-        .setIn(['panels', side, 'activePath'], fullPath)
-        .setIn(['panels', side, 'presetActiveRecord'], presetActiveRecord);
+    let updatedState = state.withMutations( state => {
+        state
+            .setIn(['panels', side, 'activePath'], fullPath)
+            .setIn(['panels', side, 'presetActiveRecord'], presetActiveRecord);
+    });
 
     return panelLoadContent(updatedState, side, fullPath, presetActiveRecord);
 }
@@ -289,12 +302,14 @@ function swapPanels(state) {
     const leftPanelRecord = state.getIn(['panels', 'left', 'activeRecord']);
     const rightPanelRecord = state.getIn(['panels', 'right', 'activeRecord']);
 
-    let stateNext = state
-        .set('activePanel', side === 'left' ? 'right' : 'left')
-        .setIn(['panels', 'left', 'activeRecord'], rightPanelRecord)
-        .setIn(['panels', 'right', 'activeRecord'], leftPanelRecord)
-        .setIn(['panels', 'left', 'activePath'], rightPanelPath)
-        .setIn(['panels', 'right', 'activePath'], leftPanelPath);
+    let stateNext = state.withMutations( state => {
+        state
+            .set('activePanel', side === 'left' ? 'right' : 'left')
+            .setIn(['panels', 'left', 'activeRecord'], rightPanelRecord)
+            .setIn(['panels', 'right', 'activeRecord'], leftPanelRecord)
+            .setIn(['panels', 'left', 'activePath'], rightPanelPath)
+            .setIn(['panels', 'right', 'activePath'], leftPanelPath);
+    });
 
     stateNext = panelLoadContent(stateNext, 'left', rightPanelPath, rightPanelRecord);
     stateNext = panelLoadContent(stateNext, 'right', leftPanelPath, leftPanelRecord);
@@ -323,9 +338,11 @@ function toggleRecordIsSelected(state) {
         (item) => { return item.set('isSelected', !item.get('isSelected')) }
     );
 
-    let selectRecorState = state
-        .setIn(['panels', side, 'selectedItemsStamp'], new Date())
-        .setIn(['panels', side, 'records'], updatedRecords);
+    let selectRecorState = state.withMutations( state => {
+        state
+            .setIn(['panels', side, 'selectedItemsStamp'], new Date())
+            .setIn(['panels', side, 'records'], updatedRecords);
+    });
 
     return moveCursorDown(selectRecorState);
 }
